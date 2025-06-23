@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  cuteblog:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cuteblog
+    ports:
+      - "8001:80"
+    volumes:
+      - ./cuteblog-php:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - cutenet
+
+  db:
+    image: mysql:5.7
+    container_name: cutedb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cuteblog
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - cutenet
+
+volumes:
+  dbdata:
+
+networks:
+  cutenet:
+    driver: bridge
